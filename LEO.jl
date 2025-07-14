@@ -105,25 +105,25 @@ function β_ffbs(c::Params)::Params
     c
 end
 
-function Σy_gibbs_LEO(c::Params)::Params
+function Σy_gibbs_LEO(c::Params; rng::AbstractRNG)::Params
     
-    T, ν_0, S_0 = data.T+(data.ρ == 0 ? -1 : 0), 2data.K, Matrix(I, data.K,data.K)
+    T, ν_0, S_0 = data.T-(1-data.ρ == 0 ? -1 : 0), 2data.K, Matrix(I, data.K,data.K)
     
     E = Vector(undef, T)
     t = 1
     for t in eachindex(E)
         ŷ = data.X * c.β[t,:]
         e = data.y[t,:] - ŷ
-        e = e * (t == data.T ? sqrt(data.ρ) : 1)
-        E[t] = e * e'
+        E[t] = (e * e') * (t == data.T ? data.ρ : 1)
     end
-    Σ_y_sample = InverseWishart(ν_0 + length(E), S_0 + sum(E)) |> rand
+    Σ_y_sample = rand(rng,
+        InverseWishart(ν_0 + data.T-(1-data.ρ), S_0 + sum(E)))
     
     c.Σ_y = Σ_y_sample
     c
 end
 
-function Σβ_gibbs_LEO(c::Params)::Params
+function Σβ_gibbs_LEO(c::Params; rng::AbstractRNG)::Params
     
     K = 3
     T, ν_0, S_0 = data.T+(data.ρ == 0 ? -1 : 0), 2K, Matrix(I, K, K)
@@ -135,16 +135,32 @@ function Σβ_gibbs_LEO(c::Params)::Params
         e = c.β[t,:] - c.β[t-1,:]
         E[t] = e * e'
     end
-    Σ_β_sample = InverseWishart(
-        ν_0 + length(E),
-        S_0 + sum(E)
-    ) |> rand
+    Σ_β_sample = rand(rng,
+            InverseWishart(
+            ν_0 + length(E),
+            S_0 + sum(E)
+        ))
 
     c.Σ_β = Σ_β_sample
     c
 end
 
-function β_ffbs_LEO(c::Params)::Params
+function β0_gibbs_LEO(c::Params; rng::AbstractRNG)::Params
+    
+    m_0, J_0 = zeros(3), I(3)/10
+    h_0 = J_0 * m_0
+    
+    Σ_β_inv = inv(c.Σ_β)
+    β_0_sample = rand(rng, MvNormalCanon(
+            h_0 + Σ_β_inv * c.β[1,:],
+            (J_0 + Σ_β_inv) |> symmetric
+    ))
+    
+    c.β_0 = β_0_sample
+    c
+end
+
+function β_ffbs_LEO(c::Params; rng::AbstractRNG)::Params
     
     T, K, ϵ = data.T+(data.ρ == 0 ? -1 : 0), 3, 1e-10
     
@@ -178,13 +194,13 @@ function β_ffbs_LEO(c::Params)::Params
     m = zeros(data.T, K); m[T,:] = θₜˌₜ_mean[T,:]
     C = repeat([zeros(K, K)], data.T); C[T] = θₜˌₜ_cov[T]
     θ_sample = zeros(data.T, K)
-    θ_sample[T,:] = MvNormal(m[T,:], (C[T] + ϵ*I) |> symmetric) |> rand
+    θ_sample[T,:] = rand(rng, MvNormal(m[T,:], (C[T] + ϵ*I) |> symmetric))
     for t in T-1:-1:1
         θₜ₊₁ˌₜ = G * θₜˌₜ_mean[t,:]
         Σ_θₜ₊₁ˌₜ = G * θₜˌₜ_cov[t] * G' + c.Σ_β
         m[t,:] = θₜˌₜ_mean[t,:] + (θₜˌₜ_cov[t] * G' * (Σ_θₜ₊₁ˌₜ \ (θ_sample[t+1,:] - θₜ₊₁ˌₜ)))
         C[t] = θₜˌₜ_cov[t] - (θₜˌₜ_cov[t] * G' * (θₜˌₜ_cov[t] * (G' / Σ_θₜ₊₁ˌₜ))')
-        θ_sample[t,:] = MvNormal(m[t,:], (C[t] + ϵ*I) |> symmetric) |> rand
+        θ_sample[t,:] = rand(rng, MvNormal(m[t,:], (C[t] + ϵ*I) |> symmetric))
     end
     
     c.β = θ_sample
@@ -192,6 +208,6 @@ function β_ffbs_LEO(c::Params)::Params
 end
 
 GibbsScan = β_ffbs ∘ β0_gibbs ∘ Σβ_gibbs ∘ Σy_gibbs
-GibbsScan_LEO = β_ffbs_LEO ∘ β0_gibbs ∘ Σβ_gibbs_LEO ∘ Σy_gibbs_LEO
+GibbsScan_LEO(c::Params; rng::AbstractRNG)::Params = β_ffbs_LEO(β0_gibbs_LEO(Σβ_gibbs_LEO(Σy_gibbs_LEO(c; rng=rng); rng=rng); rng=rng); rng=rng)
 
 ;

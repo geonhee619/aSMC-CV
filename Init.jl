@@ -1,11 +1,10 @@
-using DataFrames, CSV, JSON, JLD, RData
-using Dates, LaTeXStrings, Serialization
-using LinearAlgebra, SparseArrays, NamedArrays
+using DataFrames, CSV, JLD
+using Dates, LaTeXStrings
+using LinearAlgebra, NamedArrays
 using Random, Distributions, StatsBase, StatsFuns
 using Plots, StatsPlots, ProgressMeter
 using AdvancedHMC, LogDensityProblems
-using BridgeStan, PSIS, Roots
-using FLoops#, CUDA, FoldsCUDA
+using PSIS, Roots
 
 vecvec2mat(_v) = reduce(hcat, _v)' |> Matrix
 mat2vecvec(_m) = [_m[i,:] for i in 1:size(_m,1)]
