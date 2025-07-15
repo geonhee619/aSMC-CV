@@ -106,7 +106,7 @@ Each notebook `{LGO, LSO, LEO}.ipynb`, when run top-to-bottom, executes:
 
 1. MCMC (Markov-chain Monte Carlo) simulation multiple times,
 2. SMC (Sequential Monte Carlo) simulation multiple times, and finally
-3. replicate figures to the folder `img-[session datetime]/`.
+3. replicate figures to the folder `img_[session datetime]/`.
 
 Step 1 and 2 can be computationally intensive, especially MCMC in step 1 (which is the core motivation for the paper!).
 
