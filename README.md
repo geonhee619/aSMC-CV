@@ -48,12 +48,12 @@ The codes were developed and tested on the following environment.
 
 ## Instructions
 
-### Download/install **Julia v1.10.4**
+### (1/3) Download/install **Julia v1.10.4**
    - Link: [https://julialang.org/downloads/oldreleases/](https://julialang.org/downloads/oldreleases/#:~:text=bf8f45f85d7c615f01aa46db427c2435b397ec58f2c7ee6d4b0785481a747d98-,v1.10.4,-%2C%20on%202024%2D06)
    - Other versions would likely work, but this is the tested environment.
 
 
-### Setup multithreading via JupyterLab
+### (2/3) Setup multithreading via JupyterLab
 <!-- ### Setup multithreading
 #### Option 1: via JupyterLab -->
 
@@ -90,7 +90,7 @@ julia --project=. --threads 12
 ```
 -->
 
-#### Confirm thread count
+### (3/3) Confirm thread count
 
 To verify how many threads are running, the following code block is placed for all notebooks at the top under **Setup**:
 ```julia
