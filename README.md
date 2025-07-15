@@ -112,8 +112,8 @@ Step 1 and 2 can be computationally intensive, especially MCMC in step 1 (which 
 
 To save time and allow for replication, we have included pre-computed output files in `output/`; you can skip the simulation steps and go directly to steps 2 and/or 3 if desired. You may choose from the following execution options.
 
-| Mode | Set | MCMC | SMC | Figures |
+| Mode | Set | Step 1: MCMC | Step 2: SMC | Step 3: Figures |
 |------|-------|-----------------|----------------|-------------------|
-| **1. Full run** | In **Setup** block:<br>`RUN_MCMC = true`<br>`RUN_aSMC = true` | Run and save to `output_[datetime]/` | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
-| **2. SMC only (default)** | In **Setup** block:<br>`RUN_MCMC = false`<br>`RUN_aSMC = true` |  | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
-| **3. Replicate figures** | In **Setup** block:<br>`RUN_MCMC = false`<br>`RUN_aSMC = false` |  |  | Replicate and save to `img_[datetime]/` |
+| **I. Full run** | In **Setup** block:<br>`RUN_MCMC = true`<br>`RUN_aSMC = true` | Run and save to `output_[datetime]/` | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
+| **II. SMC only (default)** | In **Setup** block:<br>`RUN_MCMC = false`<br>`RUN_aSMC = true` |  | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
+| **III. Replicate figures** | In **Setup** block:<br>`RUN_MCMC = false`<br>`RUN_aSMC = false` |  |  | Replicate and save to `img_[datetime]/` |
