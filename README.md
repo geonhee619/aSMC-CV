@@ -110,7 +110,9 @@ Each notebook `{LGO, LSO, LEO}.ipynb`, when run top-to-bottom, executes:
 
 Step 1 and 2 can be computationally intensive, especially MCMC in step 1 (which is the core motivation for the paper!).
 
-To save time and allow for replication, we have included pre-computed output files in `output/`; you can skip the simulation steps and go directly to steps 2 and/or 3 if desired. You may choose from the following execution options.
+To save time and allow for replication, we have included pre-computed output files in `output/`; you can skip the simulation steps and go directly to steps 2 and/or 3 if desired.
+
+The following execution options are available.
 
 | Mode | Set | Step 1: MCMC | Step 2: SMC | Step 3: Figures |
 |------|-------|-----------------|----------------|-------------------|
