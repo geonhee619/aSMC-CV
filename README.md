@@ -114,8 +114,8 @@ To save time and allow for replication, we have included pre-computed output fil
 
 The following execution options are available.
 
-| Mode | Set | Step 1: MCMC | Step 2: SMC | Step 3: Figures |
+| Mode | Set in **Setup** block: | Step 1: MCMC | Step 2: SMC | Step 3: Figures |
 |------|-------|-----------------|----------------|-------------------|
-| **I. Full run** | In **Setup** block:<br>`RUN_MCMC = true`<br>`RUN_aSMC = true` | Run and save to `output_[datetime]/` | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
-| **II. SMC only (default)** | In **Setup** block:<br>`RUN_MCMC = false`<br>`RUN_aSMC = true` |  | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
-| **III. Replicate figures** | In **Setup** block:<br>`RUN_MCMC = false`<br>`RUN_aSMC = false` |  |  | Replicate and save to `img_[datetime]/` |
+| **I. Full run** | `RUN_MCMC = true`<br>`RUN_aSMC = true` | Run and save to `output_[datetime]/` | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
+| **II. SMC only (default)** | `RUN_MCMC = false`<br>`RUN_aSMC = true` |  | Run and save to `output_[datetime]/` | Replicate and save to `img_[datetime]/` |
+| **III. Replicate figures** | `RUN_MCMC = false`<br>`RUN_aSMC = false` |  |  | Replicate and save to `img_[datetime]/` |
